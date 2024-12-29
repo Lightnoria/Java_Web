@@ -1,0 +1,25 @@
+apply from: 'gradle/test.gradle'
+apply from: 'gradle/jacoco.gradle'
+
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.x.x'
+    id 'io.spring.dependency-management' version '1.x.x'
+    id 'jacoco'
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.x.x'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.mockito:mockito-core'
+}
+
+jacoco {
+    toolVersion = "0.8.8"
+}
+
+test {
+    finalizedBy jacocoTestReport
+}
