@@ -1,6 +1,10 @@
 package main.test.java.com.example.cosmocats.service;
 
 import com.example.cosmocats.exception.FeatureNotAvailableException;
+
+import main.java.com.example.cosmocats.service.CosmoCatService;
+import main.java.com.example.cosmocats.service.FeatureToggleService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -25,10 +29,10 @@ class CosmoCatServiceTest {
 
     @Test
     void getCosmoCats_ShouldReturnData_WhenFeatureEnabled() {
-        // Мокируем включение флага для функции cosmoCats
+        // Mock enable flag for the cosmoCats function
         when(featureToggleService.isCosmoCatsEnabled()).thenReturn(true);
 
-        // Проверяем, что метод возвращает данные, когда флаг включен
+        // Check that the method returns data when the flag is enabled
         String result = cosmoCatService.getCosmoCats();
 
         assertNotNull(result);
@@ -37,10 +41,10 @@ class CosmoCatServiceTest {
 
     @Test
     void getCosmoCats_ShouldThrowFeatureNotAvailableException_WhenFeatureDisabled() {
-        // Мокируем выключение флага для функции cosmoCats
+        // Mock flag deactivation for the cosmoCats function
         when(featureToggleService.isCosmoCatsEnabled()).thenReturn(false);
 
-        // Проверяем, что метод генерирует исключение, когда флаг выключен
+        // Check that the method generates an exception when the flag is off
         assertThrows(FeatureNotAvailableException.class, () -> cosmoCatService.getCosmoCats());
     }
 }

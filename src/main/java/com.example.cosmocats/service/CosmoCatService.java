@@ -17,7 +17,7 @@ public class CosmoCatService {
         if (!featureToggleService.isCosmoCatsEnabled()) {
             throw new FeatureNotAvailableException("Cosmo Cats feature is disabled.");
         }
-        // Если флаг включен, возвращаем строку с данными для демонстрации
+        // If the flag is enabled, return a string of data for the demonstration
         return "Cosmo Cats data!";
     }
 }

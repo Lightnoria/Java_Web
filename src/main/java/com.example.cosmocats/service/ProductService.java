@@ -5,6 +5,9 @@ import com.example.cosmocats.exception.ResourceNotFoundException;
 import com.example.cosmocats.mapper.ProductMapper;
 import com.example.cosmocats.model.Product;
 import com.example.cosmocats.repository.ProductRepository;
+
+import main.java.com.example.cosmocats.service.FeatureToggleService;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,10 +18,12 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
+    private final FeatureToggleService featureToggleService;
 
-    public ProductService(ProductRepository productRepository, ProductMapper productMapper) {
+    public ProductService(ProductRepository productRepository, ProductMapper productMapper, FeatureToggleService featureToggleService) {
         this.productRepository = productRepository;
         this.productMapper = productMapper;
+        this.featureToggleService = featureToggleService;
     }
 
     public ProductDTO createProduct(ProductDTO productDTO) {
@@ -28,6 +33,9 @@ public class ProductService {
     }
 
     public List<ProductDTO> getAllProducts() {
+        if (!featureToggleService.isKittyProductsEnabled()) {
+            throw new FeatureNotAvailableException("Kitty Products feature is disabled.");
+        }
         return productRepository.findAll()
                 .stream()
                 .map(productMapper::toDTO)

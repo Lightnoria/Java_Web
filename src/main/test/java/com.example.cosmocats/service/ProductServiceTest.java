@@ -2,9 +2,13 @@ package com.example.cosmocats.service;
 
 import com.example.cosmocats.dto.ProductDTO;
 import com.example.cosmocats.exception.ResourceNotFoundException;
+import com.example.cosmocats.exception.FeatureNotAvailableException; // Add import exception
 import com.example.cosmocats.mapper.ProductMapper;
 import com.example.cosmocats.model.Product;
 import com.example.cosmocats.repository.ProductRepository;
+
+import main.java.com.example.cosmocats.service.FeatureToggleService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -24,6 +28,9 @@ class ProductServiceTest {
 
     @Mock
     private ProductMapper productMapper;
+
+    @Mock
+    private FeatureToggleService featureToggleService; // Mock for FeatureToggleService
 
     @InjectMocks
     private ProductService productService;
@@ -76,7 +83,9 @@ class ProductServiceTest {
     }
 
     @Test
-    void getAllProducts_ShouldReturnListOfProducts() {
+    void getAllProducts_ShouldReturnListOfProducts_WhenFeatureEnabled() {
+        // Mock enable flag for the kittyProducts function
+        when(featureToggleService.isKittyProductsEnabled()).thenReturn(true);
         when(productRepository.findAll()).thenReturn(List.of(product));
         when(productMapper.toDTO(product)).thenReturn(productDTO);
 
@@ -86,6 +95,14 @@ class ProductServiceTest {
         assertEquals(1, result.size());
         assertEquals("Galaxy Ball", result.get(0).getName());
         verify(productRepository, times(1)).findAll();
+    }
+
+    @Test
+    void getAllProducts_ShouldThrowFeatureNotAvailableException_WhenFeatureDisabled() {
+        // Mock disabling the flag for the kittyProducts function
+        when(featureToggleService.isKittyProductsEnabled()).thenReturn(false);
+
+        assertThrows(FeatureNotAvailableException.class, () -> productService.getAllProducts());
     }
 
     @Test
