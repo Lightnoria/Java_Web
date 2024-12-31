@@ -1,16 +1,29 @@
 package com.example.cosmocats.model;
 
-public class Product {
-    private Long id;
-    private String name;
-    private String description;
-    private Double price;
-    private String category;
+import jakarta.persistence.*;
 
-    // Constructors, getters, setters, etc.
+@Entity
+public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private String name;
+
+    private String description;
+
+    @Column(nullable = false)
+    private Double price;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
+    // Constructors, getters, setters
     public Product() {}
 
-    public Product(Long id, String name, String description, Double price, String category) {
+    public Product(Long id, String name, String description, Double price, Category category) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -18,7 +31,7 @@ public class Product {
         this.category = category;
     }
 
-    // Getters and Setters
+        // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -51,11 +64,11 @@ public class Product {
         this.price = price;
     }
 
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 }

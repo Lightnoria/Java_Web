@@ -8,3 +8,18 @@ feature:
     enabled: true
   kittyProducts:
     enabled: false
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/cosmocats
+    username: postgres
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+  liquibase:
+    enabled: true
+

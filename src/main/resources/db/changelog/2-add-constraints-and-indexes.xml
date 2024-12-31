@@ -5,13 +5,13 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
     <changeSet id="2" author="developer">
-        <!-- Уникальное ограничение: product_name в пределах одной категории -->
+        <!-- Unique restriction: product_name within one category -->
         <addUniqueConstraint 
             tableName="product" 
             columnNames="product_name, category_id" 
             constraintName="uq_product_name_category" />
 
-        <!-- Индекс на поле product_name -->
+        <!-- Index on the product_name field -->
         <createIndex 
             tableName="product" 
             indexName="idx_product_name">
