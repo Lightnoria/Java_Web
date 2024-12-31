@@ -2,6 +2,9 @@ package com.example.cosmocats.controller;
 
 import com.example.cosmocats.dto.ProductDTO;
 import com.example.cosmocats.service.ProductService;
+
+import main.java.com.example.cosmocats.projection.ProductProjection;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -46,5 +49,17 @@ public class ProductController {
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    // Method to search for products by name
+    @GetMapping("/search")
+    public List<ProductProjection> searchProductsByName(@RequestParam String name) {
+        return productService.searchProductsByName(name);
+    }
+
+    // Method for obtaining popular products
+    @GetMapping("/popular")
+    public ResponseEntity<List<Object[]>> getMostPopularProducts() {
+        return ResponseEntity.ok(productService.getMostPopularProducts());
     }
 }
