@@ -22,4 +22,5 @@ spring:
       hibernate.format_sql: true
   liquibase:
     enabled: true
-
+  profiles:
+    default: default
