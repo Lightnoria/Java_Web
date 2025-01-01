@@ -1,25 +1,31 @@
 package com.example.cosmocats.config;
 
-import com.example.cosmocats.aspect.ApiKeyFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 public class SecurityConfig {
 
     @Bean
+    @Profile("default")
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-            .csrf().disable()
-            .authorizeRequests(auth -> auth
-                .antMatchers("/api/products/**").authenticated() // Захищаємо /products
-                .anyRequest().permitAll()
-            )
-            .addFilterBefore(new ApiKeyFilter(), UsernamePasswordAuthenticationFilter.class); // Додаємо кастомний фільтр
+        return http
+            .authorizeRequests()
+            .antMatchers("/api/**").authenticated()
+            .and()
+            .oauth2ResourceServer().jwt()
+            .and().build();
+    }
 
-        return http.build();
+    @Bean
+    @Profile("no-auth")
+    public SecurityFilterChain noAuthSecurityFilterChain(HttpSecurity http) throws Exception {
+        return http
+            .authorizeRequests()
+            .anyRequest().permitAll()
+            .and().build();
     }
 }

@@ -1,0 +1,4 @@
+spring:
+  profiles: no-auth
+  security:
+    enabled: false
