@@ -2,3 +2,9 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
     operations-sorter: method
+
+feature:
+  cosmoCats:
+    enabled: true
+  kittyProducts:
+    enabled: false
