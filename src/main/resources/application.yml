@@ -23,4 +23,4 @@ spring:
   liquibase:
     enabled: true
   profiles:
-    active: default
+    default: default

@@ -24,9 +24,11 @@ public class SecurityConfig {
     @Bean
     @Profile("no-auth")
     public SecurityFilterChain noAuthSecurityFilterChain(HttpSecurity http) throws Exception {
-        return http
-            .authorizeRequests()
-            .anyRequest().permitAll()
-            .and().build();
+        http
+            .authorizeRequests(authorize -> authorize
+                .anyRequest().permitAll()
+            )
+            .csrf().disable();
+        return http.build();
     }
 }

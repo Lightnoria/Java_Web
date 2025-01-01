@@ -1,4 +1,8 @@
 spring:
-  profiles: no-auth
+  profiles:
+    active: no-auth
   security:
     enabled: false
+
+server:
+  port: 8081
