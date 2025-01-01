@@ -4,9 +4,10 @@ import com.example.cosmocats.dto.ProductDTO;
 import com.example.cosmocats.exception.ResourceNotFoundException;
 import com.example.cosmocats.mapper.ProductMapper;
 import com.example.cosmocats.model.Product;
+import com.example.cosmocats.projection.ProductProjection;
 import com.example.cosmocats.repository.ProductRepository;
-
-import main.java.com.example.cosmocats.service.FeatureToggleService;
+import com.example.cosmocats.exception.FeatureNotAvailableException;
+import com.example.cosmocats.service.FeatureToggleService;
 
 import org.springframework.stereotype.Service;
 
@@ -26,12 +27,14 @@ public class ProductService {
         this.featureToggleService = featureToggleService;
     }
 
+    // A method for creating a product
     public ProductDTO createProduct(ProductDTO productDTO) {
         Product product = productMapper.toEntity(productDTO);
         Product savedProduct = productRepository.save(product);
         return productMapper.toDTO(savedProduct);
     }
 
+    // Method for obtaining all products
     public List<ProductDTO> getAllProducts() {
         if (!featureToggleService.isKittyProductsEnabled()) {
             throw new FeatureNotAvailableException("Kitty Products feature is disabled.");
@@ -42,12 +45,14 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
+    // Method for retrieving product by id
     public ProductDTO getProductById(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
         return productMapper.toDTO(product);
     }
 
+    // Method for upgrading the product
     public ProductDTO updateProduct(Long id, ProductDTO productDTO) {
         Product existingProduct = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
@@ -60,10 +65,21 @@ public class ProductService {
         return productMapper.toDTO(updatedProduct);
     }
 
+    // Method for product removal
     public void deleteProduct(Long id) {
         if (!productRepository.existsById(id)) {
             throw new ResourceNotFoundException("Product not found with id: " + id);
         }
         productRepository.deleteById(id);
+    }
+
+    // Method for searching products by name using projection
+    public List<ProductProjection> searchProductsByName(String name) {
+        return productRepository.findByNameContaining(name);
+    }
+
+    // Method for obtaining the most popular products
+    public List<Object[]> getMostPopularProducts() {
+        return productRepository.findMostPopularProducts();
     }
 }
