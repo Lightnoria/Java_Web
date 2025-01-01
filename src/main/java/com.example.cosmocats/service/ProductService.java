@@ -8,7 +8,7 @@ import com.example.cosmocats.projection.ProductProjection;
 import com.example.cosmocats.repository.ProductRepository;
 import com.example.cosmocats.exception.FeatureNotAvailableException;
 import com.example.cosmocats.service.FeatureToggleService;
-
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +20,23 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
     private final FeatureToggleService featureToggleService;
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ProductDTO createProduct(ProductDTO product) {
+        // Logic for creating a product
+        return null;
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    public List<ProductDTO> getAllProducts() {
+        // Logic for retrieving all products
+        return null;
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public void deleteProduct(Long id) {
+        // Logic for deleting a product
+    }
 
     public ProductService(ProductRepository productRepository, ProductMapper productMapper, FeatureToggleService featureToggleService) {
         this.productRepository = productRepository;
